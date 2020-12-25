@@ -7,7 +7,8 @@ if [ -z "$1" ]
     URL=$1
 fi
 
-curl --header "Content-Type: application/json" \
+curl -L \
+     --header "Content-Type: application/json" \
      --request POST \
      --data '{"request":{"intent":{"slots":{"line": "Star is cute"}}}}' \
      $URL

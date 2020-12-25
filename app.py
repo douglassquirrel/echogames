@@ -26,20 +26,10 @@ def respond():
     return jsonify(response)
 
 @app.route('/post/', methods=['POST'])
-def post_something():
-    param = request.form.get('name')
-    print(param)
-    # You can add the test cases you made in the previous function, but in our case here you are just testing the POST functionality
-    if param:
-        return jsonify({
-            "Message": f"Welcome {name} to our awesome platform!!",
-            # Add this option to distinct the POST request
-            "METHOD" : "POST"
-        })
-    else:
-        return jsonify({
-            "ERROR": "no name found, please send a name."
-        })
+def post_line():
+    request_json = request.get_json()
+    print(request_json)
+    return jsonify({"version": "1.0", "response": {"outputSpeech": {"type": "PlainText", "text": "I agree!"}}})
 
 @app.route('/')
 def root():

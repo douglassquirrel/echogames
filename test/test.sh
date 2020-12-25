@@ -2,7 +2,7 @@
 
 if [ -z "$1" ]
   then
-    URL=http://localhost:5000/post/
+    URL=http://localhost:5000/agree/
   else
     URL=$1
 fi

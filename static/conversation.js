@@ -14,7 +14,20 @@ line_input.addEventListener("keyup", function(event) {
 
 function send_line() {
     line = line_input.value;
-    document.getElementById("transcript").innerHTML += line + "<br/>";
-
+    transcript.innerHTML += line + "<br/>";
     line_input.value = "";
+
+    request = new XMLHttpRequest();
+    url = "/" + game_selector.value;
+    request.open("POST", url);
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    request.onreadystatechange = function() {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            json_response= JSON.parse(this.responseText);
+            line = json_response.response.outputSpeech.text;
+            transcript.innerHTML += line + "<br/>";
+        }
+    }
+    body = JSON.stringify({"request":{"intent":{"slots":{"line": line}}}});
+    request.send(body);
 }

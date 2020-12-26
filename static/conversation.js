@@ -1,3 +1,4 @@
+game_selector = document.getElementById("games");
 transcript = document.getElementById("transcript");
 line_input = document.getElementById("line_input");
 send_button = document.getElementById("send_button");

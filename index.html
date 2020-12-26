@@ -3,11 +3,18 @@
   <head>
     <meta charset="utf-8">
     <title>EchoGames</title>
-    <script src="static/agree.js" defer></script>
+    <script src="static/conversation.js" defer></script>
   </head>
   <body>
     <p>EchoGames!</p>
-    <div id="transcript"></div>
+    <label for="games">Choose a game:</label>
+    <select name="games" id="games">
+      <option value="agree" selected="selected">Agree</option>
+      <option value="disagree">Disagree</option>
+      <option value="guess">Guess</option>
+    </select>
+    <br/>
+    <div id="transcript" aria-live="assertive"></div>
     <input type="text" id="line_input">
     <input type="button" id="send_button" value="Send" onclick="send_line();">
   </body>

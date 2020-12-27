@@ -2,9 +2,10 @@ LINE_BREAK = "<br/>";
 
 function get_element(id) { return document.getElementById(id); }
 
-function append(element, text) { element.innerHTML += text; }
-
-function erase(element) { element.value = ""; }
+function get_value(element)      { return element.value; }
+function set_value(element, val) { element.value = val;  }
+function append(element, text)   { element.innerHTML += text; }
+function erase_value(element)    { element.value = ""; }
 
 function call_on_click(element, f) { element.onclick = f; }
 

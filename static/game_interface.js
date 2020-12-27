@@ -8,7 +8,7 @@ function send_request(game, line, print) {
         line = decode(json);
         print(line);
     }
-    request = create_http_request("/" + game, handle_response);
+    request = create_http_request("/games/" + game, handle_response);
     body = encode(line);
     request.send(body);
 }    

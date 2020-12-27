@@ -1,18 +1,23 @@
-# app.py
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, abort, render_template, request
+from games import find_handler, games
+
 app = Flask(__name__)
 
-@app.route('/agree/', methods=['POST'])
-def post_line():
+@app.route('/games/<game>/', methods=['POST'])
+def post_line(game):
     request_json = request.get_json()
     print(request_json)
-    return jsonify({"version": "1.0", "response": {"outputSpeech": {"type": "PlainText", "text": "I agree!"}}})
+
+    handler = find_handler(game)
+    if handler:
+        return handler(request_json)
+    else:
+        print(f"Unknown game: {game}")
+        abort(404)
 
 @app.route('/')
 def root():
-    print("In the root!")
-    return send_file('index.html')
+    return render_template('index.html', games=games)
 
 if __name__ == '__main__':
-    # Threaded option to enable multiple instances for multiple user access support
     app.run(threaded=True, port=5000)

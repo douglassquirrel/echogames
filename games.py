@@ -1,6 +1,6 @@
 from flask import jsonify;
 from game_random import nth_random;
-from util import to_digits;
+from util import to_digits, first_match;
 
 def get_line(json):
     return json["request"]["intent"]["slots"]["line"];
@@ -44,5 +44,5 @@ games = [{"name": "Agree",    "path": "agree",    "handler": agree   },
         ]
 
 def find_handler(path):
-    matches = iter([g["handler"] for g in games if g["path"] == path])
-    return next(matches, None)
+    g = first_match(games, lambda g: g["path"] == path);
+    return g["handler"] if g else None;

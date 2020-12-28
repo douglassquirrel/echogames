@@ -10,25 +10,25 @@ fi
 curl -L \
      --header "Content-Type: application/json" \
      --request POST \
-     --data '{"request":{"intent":{"slots":{"line": "Star is cute"}}}}' \
+     --data '{"session": {"sessionId": "test.session.24244"}, "request":{"intent":{"slots":{"line": "Star is cute"}}}}' \
      "$URL/agree"
 
 curl -L \
      --header "Content-Type: application/json" \
      --request POST \
-     --data '{"request":{"intent":{"slots":{"line": "The moon is purple"}}}}' \
+     --data '{"session": {"sessionId": "test.session.24244"}, "request":{"intent":{"slots":{"line": "The moon is purple"}}}}' \
      "$URL/disagree"
 
 curl -L \
      --header "Content-Type: application/json" \
      --request POST \
-     --data '{"request":{"intent":{"slots":{"line": "Star is cute"}}}}' \
+     --data '{"session": {"sessionId": "test.session.24244"}, "request":{"intent":{"slots":{"line": "Star is cute"}}}}' \
      "$URL/echo"
 
 curl -L \
      --header "Content-Type: application/json" \
      --request POST \
-     --data '{"request":{"intent":{"slots":{"line": "5"}}}}' \
+     --data '{"session": {"sessionId": "test.session.24244"}, "request":{"intent":{"slots":{"line": "5"}}}}' \
      "$URL/guess"
 
 curl -L \

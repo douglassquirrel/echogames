@@ -22,5 +22,17 @@ curl -L \
 curl -L \
      --header "Content-Type: application/json" \
      --request POST \
+     --data '{"request":{"intent":{"slots":{"line": "Star is cute"}}}}' \
+     "$URL/echo"
+
+curl -L \
+     --header "Content-Type: application/json" \
+     --request POST \
+     --data '{"request":{"intent":{"slots":{"line": "5"}}}}' \
+     "$URL/guess"
+
+curl -L \
+     --header "Content-Type: application/json" \
+     --request POST \
      --data '{"request":{"intent":{"slots":{"line": "The moon is purple"}}}}' \
      "$URL/doesnotexist"

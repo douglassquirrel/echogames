@@ -1,7 +1,14 @@
+from alexa import setup_alexa
 from flask import Flask, abort, render_template, request
+from flask_ask_sdk.skill_adapter import SkillAdapter
 from games import find_handler, games
 
 app = Flask(__name__)
+skill_adapter = setup_alexa(app)
+
+@app.route('/alexagames/agree', methods=['POST'])
+def invoke_skill():
+    return skill_adapter.dispatch_request()
 
 @app.route('/games/<game>/', methods=['POST'])
 def post_line(game):

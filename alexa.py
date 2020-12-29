@@ -4,8 +4,9 @@ from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_model import Response
 from ask_sdk_model.ui import SimpleCard
 from flask_ask_sdk.skill_adapter import SkillAdapter
+from os import environ
 
-SKILL_ID=12345 #Replace with real ID from environment
+ALEXA_SKILL_ID = environ["ALEXA_SKILL_ID"]
 sb = SkillBuilder()
 
 @sb.request_handler(can_handle_func=is_request_type("LaunchRequest"))
@@ -38,7 +39,8 @@ def all_exception_handler(handler_input, exception):
     return handler_input.response_builder.response
 
 def setup_alexa(app):
-    return SkillAdapter(skill=sb.create(), skill_id=SKILL_ID, app=app)
+    print("Skill ID", ALEXA_SKILL_ID)
+    return SkillAdapter(skill=sb.create(), skill_id=ALEXA_SKILL_ID, app=app)
 
 
     

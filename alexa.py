@@ -14,8 +14,6 @@ def init_alexa(app):
     app.config.setdefault(VERIFY_SIGNATURE_APP_CONFIG, False) 
     app.config.setdefault(VERIFY_TIMESTAMP_APP_CONFIG, False) 
 
-sb = SkillBuilder()
-
 class LaunchRequestHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
@@ -57,11 +55,12 @@ class AllExceptionHandler(AbstractExceptionHandler):
         handler_input.response_builder.speak(line).ask(line)
         return handler_input.response_builder.response
 
-sb.add_request_handler(LaunchRequestHandler())
-sb.add_request_handler(AgreeIntentHandler())
-sb.add_exception_handler(AllExceptionHandler())
-
 def create_alexa_handler(h, app):
+    sb = SkillBuilder()
+    sb.add_request_handler(LaunchRequestHandler())
+    sb.add_request_handler(AgreeIntentHandler())
+    sb.add_exception_handler(AllExceptionHandler())
+
     sa = SkillAdapter(skill=sb.create(), skill_id=ALEXA_SKILL_ID, app=app)
 
     def alexa_handler(): 

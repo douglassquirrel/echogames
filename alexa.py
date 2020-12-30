@@ -38,9 +38,11 @@ def all_exception_handler(handler_input, exception):
     handler_input.response_builder.speak(line).ask(line)
     return handler_input.response_builder.response
 
-def setup_alexa(app):
+def create_alexa_handler(h, app):
     print("Skill ID", ALEXA_SKILL_ID)
-    return SkillAdapter(skill=sb.create(), skill_id=ALEXA_SKILL_ID, app=app)
 
+    sa = SkillAdapter(skill=sb.create(), skill_id=ALEXA_SKILL_ID, app=app)
 
+    def alexa_handler(json): sa.dispatch_request()
+    return alexa_handler
     

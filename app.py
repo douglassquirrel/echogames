@@ -1,32 +1,26 @@
-from alexa import setup_alexa
-from api import create_response, get_client, get_line, get_session_id
+from api import get_client
 from flask import Flask, abort, render_template, request
-from flask_ask_sdk.skill_adapter import SkillAdapter
-from games import find_handler, games
+from games import find_handler, init_games, list_games
 
 app = Flask(__name__)
-skill_adapter = setup_alexa(app)
-
-@app.route('/alexagames/agree', methods=['POST'])
-def invoke_skill():
-    return skill_adapter.dispatch_request()
+init_games(app)
 
 @app.route('/games/<game>/', methods=['POST'])
 def post_line(game):
     json = request.get_json()
     print(json)
 
-    handler = find_handler(game)
+    client = get_client(json)
+    handler = find_handler(client, game)
     if handler:
-        line = handler(get_session_id(json), get_line(json))
-        return create_response(line)
+        return handler(json)
     else:
         print(f"Unknown game: {game}")
         abort(404)
 
 @app.route('/')
 def root():
-    return render_template('index.html', games=games)
+    return render_template('index.html', games=list_games())
 
 if __name__ == '__main__':
     app.run(threaded=True, port=5000)

@@ -14,7 +14,7 @@ def post_line(game):
     handler = find_handler(client, game)
     if handler:
         if not client or client != "API":
-            handler.dispatch_request()
+            return handler.dispatch_request()
         else:
             return handler(json)
     else:

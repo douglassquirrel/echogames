@@ -43,6 +43,8 @@ def create_alexa_handler(h, app):
 
     sa = SkillAdapter(skill=sb.create(), skill_id=ALEXA_SKILL_ID, app=app)
 
-    def alexa_handler(json): sa.dispatch_request()
+    def alexa_handler(json): 
+        print("Alexa handler:", json)
+        sa.dispatch_request()
     return alexa_handler
     

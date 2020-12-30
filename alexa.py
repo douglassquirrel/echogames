@@ -4,10 +4,15 @@ from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_model import Response
 from ask_sdk_model.ui import SimpleCard
 from flask import request
-from flask_ask_sdk.skill_adapter import SkillAdapter
+from flask_ask_sdk.skill_adapter import SkillAdapter, VERIFY_SIGNATURE_APP_CONFIG, VERIFY_TIMESTAMP_APP_CONFIG
 from os import environ
 
 ALEXA_SKILL_ID = environ["ALEXA_SKILL_ID"]
+
+def init_alexa(app):
+    app.config.setdefault(VERIFY_SIGNATURE_APP_CONFIG, False) 
+    app.config.setdefault(VERIFY_TIMESTAMP_APP_CONFIG, False) 
+
 sb = SkillBuilder()
 
 @sb.request_handler(can_handle_func=is_request_type("LaunchRequest"))
@@ -40,12 +45,9 @@ def all_exception_handler(handler_input, exception):
     return handler_input.response_builder.response
 
 def create_alexa_handler(h, app):
-    print("Skill ID", ALEXA_SKILL_ID)
-
     sa = SkillAdapter(skill=sb.create(), skill_id=ALEXA_SKILL_ID, app=app)
 
-    def alexa_handler(json): 
-        print("Alexa handler:", json)
-        sa.dispatch_request()
+    def alexa_handler(): 
+        return lambda json: sa.dispatch_request()
     return alexa_handler
     

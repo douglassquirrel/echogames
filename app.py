@@ -1,8 +1,10 @@
+from alexa import init_alexa
 from api import get_client
 from flask import Flask, abort, render_template, request
 from games import find_handler, init_games, list_games
 
 app = Flask(__name__)
+init_alexa(app)
 init_games(app)
 
 @app.route('/games/<game>/', methods=['POST'])
@@ -13,7 +15,8 @@ def post_line(game):
     client = get_client(json)
     handler = find_handler(client, game)
     if handler:
-        return handler(json)
+        responder = handler()
+        return responder(json)
     else:
         print(f"Unknown game: {game}")
         abort(404)

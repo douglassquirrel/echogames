@@ -7,7 +7,6 @@ def get_session_id(json): return json.get("sessionId")
 def create_response(line): return jsonify({"line": line})
 
 def create_api_handler(h):
-    def api_handler(json):
-        response = h(get_session_id(json), get_line(json))
-        return create_response(response)
+    def api_handler():
+        return lambda json: create_response(h(get_session_id(json), get_line(json)))
     return api_handler

@@ -12,6 +12,12 @@ def init_alexa(app):
     app.config.setdefault(VERIFY_SIGNATURE_APP_CONFIG, False) 
     app.config.setdefault(VERIFY_TIMESTAMP_APP_CONFIG, False) 
 
+def make_response(handler_input, response, end_session_flag):
+    handler_input.response_builder.speak(response) \
+            .set_card(SimpleCard("EchoGames", response)) \
+            .set_should_end_session(end_session_flag)
+    return handler_input.response_builder.response
+
 class LaunchRequestHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
@@ -19,12 +25,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        response = "Welcome to the game!"
-
-        handler_input.response_builder.speak(response) \
-            .set_card(SimpleCard("Agreeable", response)) \
-            .set_should_end_session(False)
-        return handler_input.response_builder.response
+        return make_response(handler_input, "Welcome to the game!", False)
 
 class IntentHandler(AbstractRequestHandler):
     def __init__(self, game, name):
@@ -37,14 +38,11 @@ class IntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        line = "FOO"
         session_id = handler_input.request_envelope.session.session_id
+        line = "FOO"
         response = self.game(session_id, line)
 
-        handler_input.response_builder.speak(response) \
-            .set_card(SimpleCard("Agreeable", response)) \
-            .set_should_end_session(True)
-        return handler_input.response_builder.response
+        return make_response(handler_input, response, True)
 
 class AllExceptionHandler(AbstractExceptionHandler):
     def can_handle(self, handler_input, exception):

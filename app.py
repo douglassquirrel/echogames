@@ -1,7 +1,7 @@
 from alexa import init_alexa
 from api import get_client
 from flask import Flask, abort, render_template, request
-from games import find_handler, init_games, list_games
+from game_manager import find_handler, init_games, list_games
 
 app = Flask(__name__)
 init_alexa(app)

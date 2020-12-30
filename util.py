@@ -7,10 +7,6 @@ def to_digits(s):
     except ValueError:
         return 0
 
-def first_match(the_list, cond):
-    matches = (x for x in the_list if cond(x))
-    return next(matches, None)
-
 def flatten(L):
     return [item for sublist in L for item in sublist]
 
@@ -19,3 +15,8 @@ def sign(x):
 
 def compare(a, b):
     return sign(a - b)
+
+def n_times(n, L):
+    for _ in range(n):
+        r = L()
+    return r;

@@ -38,12 +38,15 @@ def guess(session_id, line):
     store_line(session_id, response)
     return response
 
+def path(g): return g.__name__
+def name(g): return path(g).capitalize() 
+
+games = [agree, disagree, echo, guess]
 handlers = None
 def init_games(app):
     global handlers
-    games = [agree, disagree, echo, guess]
     def create_handlers(g): return {"API": create_api_handler(g), "alexa": create_alexa_handler(g, app)}
-    handlers = {g.__name__: create_handlers(g) for g in games}
+    handlers = {path(g): create_handlers(g) for g in games}
 
 def find_handler(client, path):
     if not client or client != "API":
@@ -52,5 +55,5 @@ def find_handler(client, path):
     return None if not g else g[client]
 
 def list_games():
-    games = handlers.keys() 
-    return [{"path": g, "name": g.capitalize()} for g in games]
+    return [{"path": path(g), "name": name(g)} for g in games]
+

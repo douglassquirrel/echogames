@@ -8,11 +8,12 @@ from flask import request
 from flask_ask_sdk.skill_adapter import SkillAdapter, VERIFY_SIGNATURE_APP_CONFIG, VERIFY_TIMESTAMP_APP_CONFIG
 from os import environ
 
-ALEXA_SKILL_ID = environ["ALEXA_SKILL_ID"]
-
 def init_alexa(app):
     app.config.setdefault(VERIFY_SIGNATURE_APP_CONFIG, False) 
     app.config.setdefault(VERIFY_TIMESTAMP_APP_CONFIG, False) 
+
+def intent(game): 
+    return game.__name__.capitalize() + "Intent"
 
 class LaunchRequestHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
@@ -21,24 +22,29 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        line = "I'm agreeable, say something!"
+        response = "Welcome to the game!"
 
-        handler_input.response_builder.speak(line) \
-            .set_card(SimpleCard("Agreeable", line)) \
+        handler_input.response_builder.speak(response) \
+            .set_card(SimpleCard("Agreeable", response)) \
             .set_should_end_session(False)
         return handler_input.response_builder.response
 
-class AgreeIntentHandler(AbstractRequestHandler):
+class IntentHandler(AbstractRequestHandler):
+    def __init__(self, game):
+        self.game = game
+
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return is_intent_name("AgreeIntent")(handler_input)
+        return is_intent_name(intent(self.game))(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        line = "I agree!"
+        line = "FOO"
+        session_id = handler_input.request_envelope.session.session_id
+        response = self.game(session_id, line)
 
-        handler_input.response_builder.speak(line) \
-            .set_card(SimpleCard("Agreeable", line)) \
+        handler_input.response_builder.speak(response) \
+            .set_card(SimpleCard("Agreeable", response)) \
             .set_should_end_session(True)
         return handler_input.response_builder.response
 
@@ -51,14 +57,16 @@ class AllExceptionHandler(AbstractExceptionHandler):
         # type: (HandlerInput, Exception) -> Response
         print(exception)
 
-        line = "Sorry, I didn't understand, so I can't agree. Please try again!"
-        handler_input.response_builder.speak(line).ask(line)
+        response = "Sorry, I didn't understand. Please try again!"
+        handler_input.response_builder.speak(response).ask(response)
         return handler_input.response_builder.response
 
-def create_alexa_handler(h, app):
+def create_alexa_handler(game, app):
+    ALEXA_SKILL_ID = environ["ALEXA_SKILL_ID"]
+
     sb = SkillBuilder()
     sb.add_request_handler(LaunchRequestHandler())
-    sb.add_request_handler(AgreeIntentHandler())
+    sb.add_request_handler(IntentHandler(game))
     sb.add_exception_handler(AllExceptionHandler())
 
     sa = SkillAdapter(skill=sb.create(), skill_id=ALEXA_SKILL_ID, app=app)

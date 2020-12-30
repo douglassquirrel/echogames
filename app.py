@@ -13,7 +13,10 @@ def post_line(game):
     client = get_client(json)
     handler = find_handler(client, game)
     if handler:
-        return handler(json)
+        if not client or client != "API":
+            handler.dispatch_request()
+        else:
+            return handler(json)
     else:
         print(f"Unknown game: {game}")
         abort(404)

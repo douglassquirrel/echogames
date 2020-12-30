@@ -42,6 +42,7 @@ def create_alexa_handler(h, app):
     print("Skill ID", ALEXA_SKILL_ID)
 
     sa = SkillAdapter(skill=sb.create(), skill_id=ALEXA_SKILL_ID, app=app)
+    return sa
 
     def alexa_handler(json): 
         print("Alexa handler:", json)

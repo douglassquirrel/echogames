@@ -4,7 +4,11 @@ from util import flatten
 
 DATABASE_URL = environ['DATABASE_URL']
 
-CREATE_DB        = "CREATE TABLE IF NOT EXISTS conversations (id SERIAL PRIMARY KEY, session_id VARCHAR, line VARCHAR)"
+CREATE_DB        = """CREATE TABLE IF NOT EXISTS conversations
+                      (id SERIAL PRIMARY KEY, 
+                       session_id VARCHAR, 
+                       line VARCHAR,
+                       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())"""
 INSERT_LINE      = "INSERT INTO conversations (session_id, line) VALUES (%s, %s)"
 GET_CONVERSATION = "SELECT line FROM conversations WHERE session_id = %s"
 

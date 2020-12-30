@@ -48,7 +48,7 @@ class IntentHandler(AbstractRequestHandler):
             line = arbitrary_dict_element(slots).value
         response = self.game(session_id, line)
 
-        return make_response(handler_input, response, True)
+        return make_response(handler_input, response, False)
 
 class AllExceptionHandler(AbstractExceptionHandler):
     def can_handle(self, handler_input, exception):

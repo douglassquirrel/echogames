@@ -1,9 +1,8 @@
 function encode(session_id, line) { 
-    json = {"session":{"sessionId":session_id},
-            "request":{"intent":{"slots":{"line": line}}}};
+    json = {"client": "API", "sessionId": session_id, "line": line}
     return JSON.stringify(json);
 }
-function decode(json) { return json.response.outputSpeech.text; }
+function decode(json) { return json.line; }
 
 function send_request(session_id, game, line, print) {
     handle_response = function() {

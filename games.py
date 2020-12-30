@@ -4,12 +4,12 @@ from game_random import nth_random
 from util import compare, first_match, to_digits
 
 def get_line(json):
-    return json["request"]["intent"]["slots"]["line"]
+    return json["line"]
 def get_session(json):
-    return json["session"]["sessionId"]
+    return json["sessionId"]
 
-def create_response(text):
-    return jsonify({"version": "1.0", "response": {"outputSpeech": {"type": "PlainText", "text": text}}})
+def create_response(line):
+    return jsonify({"line": line})
 
 def agree(json):
     return create_response("I agree!")

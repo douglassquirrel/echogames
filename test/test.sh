@@ -7,32 +7,20 @@ if [ -z "$1" ]
     URL=$1
 fi
 
-curl -L \
-     --header "Content-Type: application/json" \
-     --request POST \
-     --data '{"session": {"sessionId": "test.session.24244"}, "request":{"intent":{"slots":{"line": "Star is cute"}}}}' \
-     "$URL/agree"
+HEADER="Content-Type: application/json" \
+DATA_FMT='{"client": "API", "sessionId": "test.session.24244", "line": "%s"}'
 
-curl -L \
-     --header "Content-Type: application/json" \
-     --request POST \
-     --data '{"session": {"sessionId": "test.session.24244"}, "request":{"intent":{"slots":{"line": "The moon is purple"}}}}' \
-     "$URL/disagree"
+printf -v DATA "$DATA_FMT" "Star is cute"
+curl -L --header "$HEADER" --request POST --data "$DATA" "$URL/agree"
 
-curl -L \
-     --header "Content-Type: application/json" \
-     --request POST \
-     --data '{"session": {"sessionId": "test.session.24244"}, "request":{"intent":{"slots":{"line": "Star is cute"}}}}' \
-     "$URL/echo"
+printf -v DATA "$DATA_FMT" "The moon is purple"
+curl -L --header "$HEADER" --request POST --data "$DATA" "$URL/disagree"
 
-curl -L \
-     --header "Content-Type: application/json" \
-     --request POST \
-     --data '{"session": {"sessionId": "test.session.24244"}, "request":{"intent":{"slots":{"line": "5"}}}}' \
-     "$URL/guess"
+printf -v DATA "$DATA_FMT" "Star is cute"
+curl -L --header "$HEADER" --request POST --data "$DATA" "$URL/echo"
 
-curl -L \
-     --header "Content-Type: application/json" \
-     --request POST \
-     --data '{"request":{"intent":{"slots":{"line": "The moon is purple"}}}}' \
-     "$URL/doesnotexist"
+printf -v DATA "$DATA_FMT" "5"
+curl -L --header "$HEADER" --request POST --data "$DATA" "$URL/guess"
+
+printf -v DATA "$DATA_FMT" "Star is cute"
+curl -L --header "$HEADER" --request POST --data "$DATA" "$URL/doesnotexist"

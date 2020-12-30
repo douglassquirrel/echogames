@@ -45,7 +45,7 @@ class IntentHandler(AbstractRequestHandler):
         if not slots:
             line = "FOO"
         else:
-            line = arbitrary_dict_element(slots)["value"]
+            line = arbitrary_dict_element(slots).value
         response = self.game(session_id, line)
 
         return make_response(handler_input, response, True)

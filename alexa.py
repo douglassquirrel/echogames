@@ -4,7 +4,6 @@ from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_model import Response
 from ask_sdk_model.ui import SimpleCard
-from flask import request
 from flask_ask_sdk.skill_adapter import SkillAdapter, VERIFY_SIGNATURE_APP_CONFIG, VERIFY_TIMESTAMP_APP_CONFIG
 from os import environ
 
@@ -38,8 +37,14 @@ class IntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        session_id = handler_input.request_envelope.session.session_id
-        line = "FOO"
+        re = handler_input.request_envelope
+        session_id = re.session.session_id
+        slots = re.request.intent.slots
+        print("Slots:", slots)
+        if not slots:
+            line = "FOO"
+        else:
+            line = slots[0].value
         response = self.game(session_id, line)
 
         return make_response(handler_input, response, True)

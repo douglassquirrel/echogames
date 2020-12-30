@@ -28,3 +28,13 @@ def store_line(session_id, line):
 
 def get_conversation(session_id):
     return flatten(run_sql(GET_CONVERSATION, (session_id,)))
+
+def wrap_handler(h):
+    def wrapped_handler(session_id, line):
+        store_line(session_id, line)
+        conversation = get_conversation(session_id)
+
+        response = h(session_id, conversation)
+        store_line(session_id, response)
+        return response
+    return wrapped_handler

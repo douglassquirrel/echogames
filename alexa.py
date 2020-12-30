@@ -12,9 +12,6 @@ def init_alexa(app):
     app.config.setdefault(VERIFY_SIGNATURE_APP_CONFIG, False) 
     app.config.setdefault(VERIFY_TIMESTAMP_APP_CONFIG, False) 
 
-def intent(game): 
-    return game.__name__.capitalize() + "Intent"
-
 class LaunchRequestHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
@@ -30,12 +27,13 @@ class LaunchRequestHandler(AbstractRequestHandler):
         return handler_input.response_builder.response
 
 class IntentHandler(AbstractRequestHandler):
-    def __init__(self, game):
+    def __init__(self, game, name):
         self.game = game
+        self.name = name
 
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return is_intent_name(intent(self.game))(handler_input)
+        return is_intent_name(self.name + "Intent")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -61,12 +59,12 @@ class AllExceptionHandler(AbstractExceptionHandler):
         handler_input.response_builder.speak(response).ask(response)
         return handler_input.response_builder.response
 
-def create_alexa_handler(game, app):
+def create_alexa_handler(game, name, app):
     ALEXA_SKILL_ID = environ["ALEXA_SKILL_ID"]
 
     sb = SkillBuilder()
     sb.add_request_handler(LaunchRequestHandler())
-    sb.add_request_handler(IntentHandler(game))
+    sb.add_request_handler(IntentHandler(game, name))
     sb.add_exception_handler(AllExceptionHandler())
 
     sa = SkillAdapter(skill=sb.create(), skill_id=ALEXA_SKILL_ID, app=app)

@@ -1,4 +1,5 @@
 from alexa import setup_alexa
+from api import create_response, get_client, get_line, get_session_id
 from flask import Flask, abort, render_template, request
 from flask_ask_sdk.skill_adapter import SkillAdapter
 from games import find_handler, games
@@ -12,12 +13,13 @@ def invoke_skill():
 
 @app.route('/games/<game>/', methods=['POST'])
 def post_line(game):
-    request_json = request.get_json()
-    print(request_json)
+    json = request.get_json()
+    print(json)
 
     handler = find_handler(game)
     if handler:
-        return handler(request_json)
+        line = handler(get_session_id(json), get_line(json))
+        return create_response(line)
     else:
         print(f"Unknown game: {game}")
         abort(404)

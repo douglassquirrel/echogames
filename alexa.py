@@ -6,6 +6,7 @@ from ask_sdk_model import Response
 from ask_sdk_model.ui import SimpleCard
 from flask_ask_sdk.skill_adapter import SkillAdapter, VERIFY_SIGNATURE_APP_CONFIG, VERIFY_TIMESTAMP_APP_CONFIG
 from os import environ
+from util import arbitrary_dict_element
 
 def init_alexa(app):
     app.config.setdefault(VERIFY_SIGNATURE_APP_CONFIG, False) 
@@ -40,11 +41,11 @@ class IntentHandler(AbstractRequestHandler):
         re = handler_input.request_envelope
         session_id = re.session.session_id
         slots = re.request.intent.slots
-        print("Slots:", slots)
+        print("Slots:", type(slots), slots)
         if not slots:
             line = "FOO"
         else:
-            line = slots[0].value
+            line = arbitrary_dict_element(slots)["value"]
         response = self.game(session_id, line)
 
         return make_response(handler_input, response, True)
@@ -56,7 +57,7 @@ class AllExceptionHandler(AbstractExceptionHandler):
 
     def handle(self, handler_input, exception):
         # type: (HandlerInput, Exception) -> Response
-        print(exception)
+        print("Exception:", exception)
 
         response = "Sorry, I didn't understand. Please try again!"
         handler_input.response_builder.speak(response).ask(response)

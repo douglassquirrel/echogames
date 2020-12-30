@@ -20,3 +20,6 @@ def n_times(n, L):
     for _ in range(n):
         r = L()
     return r;
+
+def arbitrary_dict_element(d):
+    return next(iter(d.values()))

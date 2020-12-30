@@ -3,6 +3,7 @@ from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_model import Response
 from ask_sdk_model.ui import SimpleCard
+from flask import request
 from flask_ask_sdk.skill_adapter import SkillAdapter
 from os import environ
 
@@ -42,7 +43,6 @@ def create_alexa_handler(h, app):
     print("Skill ID", ALEXA_SKILL_ID)
 
     sa = SkillAdapter(skill=sb.create(), skill_id=ALEXA_SKILL_ID, app=app)
-    return sa
 
     def alexa_handler(json): 
         print("Alexa handler:", json)

@@ -10,6 +10,9 @@ def to_digits(s):
 def flatten(L):
     return [item for sublist in L for item in sublist]
 
+def flatzip(L, M):
+    return flatten(list(zip(L, M)))
+
 def sign(x):
     return 0 if x == 0 else int(copysign(1, x))
 
@@ -20,6 +23,3 @@ def n_times(n, L):
     for _ in range(n):
         r = L()
     return r;
-
-def arbitrary_dict_element(d):
-    return next(iter(d.values()))

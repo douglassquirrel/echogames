@@ -6,7 +6,7 @@ from ask_sdk_model import Response
 from ask_sdk_model.ui import SimpleCard
 from flask_ask_sdk.skill_adapter import SkillAdapter, VERIFY_SIGNATURE_APP_CONFIG, VERIFY_TIMESTAMP_APP_CONFIG
 from os import environ
-from util import arbitrary_dict_element
+from util import flatzip
 
 def init_alexa(app):
     app.config.setdefault(VERIFY_SIGNATURE_APP_CONFIG, False) 
@@ -40,14 +40,13 @@ class IntentHandler(AbstractRequestHandler):
         # type: (HandlerInput) -> Response
         re = handler_input.request_envelope
         session_id = re.session.session_id
-        slots = re.request.intent.slots
-        print("Slots:", type(slots), slots)
-        if not slots:
-            line = "FOO"
-        else:
-            line = arbitrary_dict_element(slots).value
-        response = self.game(session_id, line)
 
+        slots = re.request.intent.slots or {}
+        slot_names = slots.keys()
+        slot_values = [s.value for s in slots.values()]
+        line = " ".join(flatzip(slot_names, slot_values))
+
+        response = self.game(session_id, line)
         return make_response(handler_input, response, False)
 
 class AllExceptionHandler(AbstractExceptionHandler):
